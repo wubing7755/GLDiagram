@@ -26,6 +26,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 # 5. 链接库文件
 target_link_directories(${PROJECT_NAME} PRIVATE ${LIBS_DIR})
 target_link_libraries(${PROJECT_NAME}
-    glfw3           # 链接 glfw3.lib
-    opengl32        # Windows 需要链接 opengl32.lib
+    glfw3           # glfw3.lib
+    opengl32        # Windows need link opengl32.lib
 )

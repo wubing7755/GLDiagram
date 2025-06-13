@@ -53,7 +53,7 @@ xcuserdata/
 *.so
 *.dylib
 *.a
-*.lib
+# *.lib
 *.pdb
 *.ilk
 *.exp
