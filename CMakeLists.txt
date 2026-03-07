@@ -1,31 +1,72 @@
 cmake_minimum_required(VERSION 3.15)
-project(GLD_RUN)
 
-# 1. …Ë÷√C++±Í◊º
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# 2. ∂®“ÂœÓƒøΩ·ππ
-set(HEAD_DIR ${CMAKE_SOURCE_DIR}/heads)
-set(LIBS_DIR ${CMAKE_SOURCE_DIR}/libs)
-
-# 3. œ»¥¥Ω®ø…÷¥––ƒø±Í
-add_executable(${PROJECT_NAME}
-    src/main.cpp        # ÷˜≥Ã–Ú»Îø⁄
-    glad/glad.c          # GLAD  µœ÷Œƒº˛
+project(GLDiagram
+    VERSION 1.0.0
+    DESCRIPTION "OpenGL Drawing Canvas"
+    LANGUAGES C
 )
 
-# 4. ÃÌº”Õ∑Œƒº˛À—À˜¬∑æ∂
-target_include_directories(${PROJECT_NAME} PUBLIC
-    ${HEAD_DIR}
-    ${HEAD_DIR}/glad
-    ${HEAD_DIR}/GLFW
-    ${HEAD_DIR}/KHR
+# ---------- C Ê†áÂáÜ ----------
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# ---------- ËæìÂá∫ÁõÆÂΩï ----------
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# ---------- FetchContent ----------
+include(FetchContent)
+
+# ---------- ‰∏ãËΩΩ GLFW ----------
+FetchContent_Declare(
+    glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG 3.3.9
 )
 
-# 5. ¡¥Ω”ø‚Œƒº˛
-target_link_directories(${PROJECT_NAME} PRIVATE ${LIBS_DIR})
-target_link_libraries(${PROJECT_NAME}
-    glfw3           # glfw3.lib
-    opengl32        # Windows need link opengl32.lib
+FetchContent_MakeAvailable(glfw)
+
+# ---------- Êü•Êâæ OpenGL ----------
+find_package(OpenGL REQUIRED)
+
+# ---------- Ê∫êÊñá‰ª∂ ----------
+set(SOURCES
+    src/main.c
+    src/glad.c
 )
+
+# ---------- ÂèØÊâßË°åÊñá‰ª∂ ----------
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+# ---------- Â§¥Êñá‰ª∂ÁõÆÂΩï ----------
+target_include_directories(${PROJECT_NAME} PRIVATE
+    include
+)
+
+# ---------- ÈìæÊé•Â∫ì ----------
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    glfw
+    OpenGL::GL
+)
+
+# ---------- Windows È¢ùÂ§ñÂ∫ì ----------
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        gdi32
+    )
+endif()
+
+# ---------- Linux ----------
+if(UNIX AND NOT APPLE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        pthread
+        dl
+    )
+endif()
+
+# ---------- ÊûÑÂª∫‰ø°ÊÅØ ----------
+message(STATUS "----------------------------------")
+message(STATUS "Project: ${PROJECT_NAME}")
+message(STATUS "Version: ${PROJECT_VERSION}")
+message(STATUS "System: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "Compiler: ${CMAKE_C_COMPILER}")
+message(STATUS "----------------------------------")
