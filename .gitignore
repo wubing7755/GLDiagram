@@ -38,8 +38,12 @@ Release/
 cmake-build-*/
 
 # VSCode
+.cache/
 .vscode/
 *.code-workspace
+!extensions.json
+!launch.json
+!tasks.json
 
 # Xcode
 *.xcodeproj/
