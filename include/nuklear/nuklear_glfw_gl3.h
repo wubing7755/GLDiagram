@@ -101,7 +101,7 @@ struct nk_glfw_vertex {
 #ifdef __APPLE__
   #define NK_SHADER_VERSION "#version 150\n"
 #else
-  #define NK_SHADER_VERSION "#version 300 es\n"
+  #define NK_SHADER_VERSION "#version 330\n"
 #endif
 
 NK_API void
@@ -142,14 +142,29 @@ nk_glfw3_device_create(struct nk_glfw* glfw)
     glCompileShader(dev->vert_shdr);
     glCompileShader(dev->frag_shdr);
     glGetShaderiv(dev->vert_shdr, GL_COMPILE_STATUS, &status);
-    assert(status == GL_TRUE);
+    if (status != GL_TRUE) {
+        char log[512];
+        glGetShaderInfoLog(dev->vert_shdr, sizeof(log), NULL, log);
+        fprintf(stderr, "Vertex shader compilation failed: %s\n", log);
+        return;
+    }
     glGetShaderiv(dev->frag_shdr, GL_COMPILE_STATUS, &status);
-    assert(status == GL_TRUE);
+    if (status != GL_TRUE) {
+        char log[512];
+        glGetShaderInfoLog(dev->frag_shdr, sizeof(log), NULL, log);
+        fprintf(stderr, "Fragment shader compilation failed: %s\n", log);
+        return;
+    }
     glAttachShader(dev->prog, dev->vert_shdr);
     glAttachShader(dev->prog, dev->frag_shdr);
     glLinkProgram(dev->prog);
     glGetProgramiv(dev->prog, GL_LINK_STATUS, &status);
-    assert(status == GL_TRUE);
+    if (status != GL_TRUE) {
+        char log[512];
+        glGetProgramInfoLog(dev->prog, sizeof(log), NULL, log);
+        fprintf(stderr, "Shader program linking failed: %s\n", log);
+        return;
+    }
 
     dev->uniform_tex = glGetUniformLocation(dev->prog, "Texture");
     dev->uniform_proj = glGetUniformLocation(dev->prog, "ProjMtx");
@@ -211,6 +226,7 @@ nk_glfw3_device_destroy(struct nk_glfw* glfw)
     glDeleteTextures(1, &dev->font_tex);
     glDeleteBuffers(1, &dev->vbo);
     glDeleteBuffers(1, &dev->ebo);
+    glDeleteVertexArrays(1, &dev->vao);
     nk_buffer_free(&dev->cmds);
 }
 

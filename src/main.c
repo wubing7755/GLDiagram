@@ -55,6 +55,7 @@ int main(void)
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         printf("Failed to init GLAD\n");
+        glfwTerminate();
         return -1;
     }
 
