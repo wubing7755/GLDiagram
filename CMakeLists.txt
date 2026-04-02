@@ -14,7 +14,15 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # ---------- 输出目录 ----------
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+# 对于 Visual Studio 多配置生成器，需要设置 CMAKE_CONFIGURATION_TYPES
+if(CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_BINARY_DIR}/bin)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${CMAKE_BINARY_DIR}/bin)
+else()
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endif()
 
 # ---------- FetchContent ----------
 include(FetchContent)
@@ -64,12 +72,19 @@ set(SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # ---------- 头文件目录 ----------
-# GLFW/KHR from FetchContent, glad/KHR from local, Nuklear from FetchContent
+# GLFW/Nuklear from FetchContent, glad/KHR from local
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${glfw_SOURCE_DIR}/include
     ${nuklear_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
 )
+
+# ---------- KHR Headers ----------
+# Copy KHR headers from GLFW deps if not present
+if(NOT EXISTS ${CMAKE_SOURCE_DIR}/include/KHR/khrplatform.h)
+    file(COPY ${glfw_SOURCE_DIR}/deps/glad/khrplatform.h
+         DESTINATION ${CMAKE_SOURCE_DIR}/include/KHR/)
+endif()
 
 # ---------- 链接库 ----------
 target_link_libraries(${PROJECT_NAME} PRIVATE
