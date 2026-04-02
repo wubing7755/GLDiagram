@@ -28,10 +28,28 @@ FetchContent_Declare(
     GIT_TAG 3.3.9
 )
 
-FetchContent_MakeAvailable(glfw)
+# ---------- 下载 Nuklear ----------
+FetchContent_Declare(
+    nuklear
+    GIT_REPOSITORY https://github.com/Immediate-Mode-UI/Nuklear.git
+)
+
+FetchContent_MakeAvailable(glfw nuklear)
 
 # ---------- 查找 OpenGL ----------
 find_package(OpenGL REQUIRED)
+
+# ---------- GLAD ----------
+# glad.c 不在版本控制中，需要通过 glad 工具生成
+# 生成命令: pip install glad && glad --generator=c --profile=core --api=gl:3.3 --out-path=include/glad/
+# 或访问 https://glad.dav1d.de/ 在线生成
+if(NOT EXISTS ${CMAKE_SOURCE_DIR}/src/glad.c OR NOT EXISTS ${CMAKE_SOURCE_DIR}/include/glad/glad.h)
+    message(FATAL_ERROR "glad files not found.\n"
+        "Run the following commands to generate:\n"
+        "  pip install glad\n"
+        "  glad --generator=c --profile=core --api=gl:3.3 --out-path=include/glad/\n"
+    )
+endif()
 
 # ---------- 源文件 ----------
 set(SOURCES
@@ -43,8 +61,11 @@ set(SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # ---------- 头文件目录 ----------
+# GLFW/KHR from FetchContent, glad/KHR from local, Nuklear from FetchContent
 target_include_directories(${PROJECT_NAME} PRIVATE
-    include
+    ${glfw_SOURCE_DIR}/include
+    ${nuklear_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
 )
 
 # ---------- 链接库 ----------

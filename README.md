@@ -4,7 +4,7 @@ GLDiagram
 An OpenGL drawing canvas with Nuklear immediate-mode GUI.
 A minimal starter template for OpenGL 3.3 + GUI applications.
 
-$2026-04$
+$LastChangedDate$
 
 Contents:
 
@@ -36,6 +36,8 @@ I.   OVERVIEW
 
 II.  QUICK START
 
+     $ git clone <repository-url>
+     $ cd GLDiagram
      $ mkdir build && cd build
      $ cmake ..
      $ cmake --build .
@@ -96,13 +98,14 @@ V.   PROJECT STRUCTURE
      |
      +- src/
      |  +- main.c                Application entry point
-     |  +- glad.c                OpenGL function loader
+     |  +- glad.c                OpenGL function loader (in git)
      |
      +- include/
-     |  +- GLFW/                 GLFW headers
-     |  +- glad/                 GLAD headers
-     |  +- KHR/                  Khronos headers
-     |  +- nuklear/              Nuklear headers
+     |  +- glad/
+     |  |  +- glad.h             GLAD header (in git)
+     |  +- nuklear/
+     |     +- nuklear_glfw_gl3.h Nuklear GLFW backend (in git)
+     |     +- nuklear.h          Nuklear core (via FetchContent)
      |
      +- build/                   Build output (created by CMake)
 
@@ -138,8 +141,10 @@ VII. DEPENDENCIES
      Nuklear    latest   https://github.com/Immediate-Mode-UI/Nuklear  MIT
      GLAD       0.1.36   https://github.com/Dav1dde/glad  MIT
 
-     All dependencies are downloaded automatically via CMake
-     FetchContent at configure time. No manual installation required.
+     GLFW and Nuklear are downloaded automatically via CMake
+     FetchContent at configure time. GLAD is included in the git
+     repository (regenerate via: pip install glad && glad --generator=c
+     --profile=core --api=gl:3.3 --out-path=include/glad/).
 
 
 

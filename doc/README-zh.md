@@ -4,7 +4,7 @@ GLDiagram
 基于 OpenGL 3.3 的绘图画布，集成了 Nuklear 即时模式 GUI。
 一个极简的 OpenGL + GUI 应用起步模板。
 
-$2026-04$
+$LastChangedDate$
 
 目录:
 
@@ -35,6 +35,8 @@ I.   概述
 
 II.  快速开始
 
+     $ git clone <仓库URL>
+     $ cd GLDiagram
      $ mkdir build && cd build
      $ cmake ..
      $ cmake --build .
@@ -96,13 +98,14 @@ V.   项目结构
      |
      +- src/
      |  +- main.c                程序入口
-     |  +- glad.c                OpenGL 函数加载器
+     |  +- glad.c                OpenGL 函数加载器（已在 git 中）
      |
      +- include/
-     |  +- GLFW/                 GLFW 头文件
-     |  +- glad/                 GLAD 头文件
-     |  +- KHR/                  Khronos 头文件
-     |  +- nuklear/              Nuklear 头文件
+     |  +- glad/
+     |  |  +- glad.h             GLAD 头文件（已在 git 中）
+     |  +- nuklear/
+     |     +- nuklear_glfw_gl3.h Nuklear GLFW 后端（已在 git 中）
+     |     +- nuklear.h          Nuklear 核心（通过 FetchContent 下载）
      |
      +- build/                   编译输出目录 (CMake 自动创建)
 
@@ -137,8 +140,9 @@ VII. 依赖说明
      Nuklear    latest   https://github.com/Immediate-Mode-UI/Nuklear  MIT
      GLAD       0.1.36   https://github.com/Dav1dde/glad  MIT
 
-     所有依赖通过 CMake FetchContent 在配置阶段自动下载。
-     无需手动安装任何第三方库。
+     GLFW 和 Nuklear 通过 CMake FetchContent 在配置阶段自动下载。
+     GLAD 已包含在 git 仓库中（重新生成: pip install glad && glad
+     --generator=c --profile=core --api=gl:3.3 --out-path=include/glad/）。
 
 
 
