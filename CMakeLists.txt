@@ -17,6 +17,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include(FetchContent)
 
 # ---------- 下载 GLFW ----------
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_FOR_DISTRO OFF CACHE BOOL "" FORCE)
+
 FetchContent_Declare(
     glfw
     GIT_REPOSITORY https://github.com/glfw/glfw.git
@@ -55,8 +60,8 @@ if(WIN32)
     )
 endif()
 
-# ---------- Linux ----------
-if(UNIX AND NOT APPLE)
+# ---------- Unix (Linux/macOS) ----------
+if(UNIX)
     target_link_libraries(${PROJECT_NAME} PRIVATE
         pthread
         dl
