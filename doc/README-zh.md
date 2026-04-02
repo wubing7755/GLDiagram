@@ -79,6 +79,11 @@ IV.  编译构建
 
      编译产物输出到 build/bin/ 目录。
 
+     测试（可选）:
+     $ cmake -DBUILD_TESTING=ON ..
+     $ cmake --build .
+     $ ctest --output-on-failure
+
 
 
 V.   项目结构

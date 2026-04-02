@@ -6,6 +6,9 @@ project(GLDiagram
     LANGUAGES C
 )
 
+# ---------- 测试 ----------
+include(CTest)
+
 # ---------- C 标准 ----------
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -96,3 +99,10 @@ message(STATUS "Version: ${PROJECT_VERSION}")
 message(STATUS "System: ${CMAKE_SYSTEM_NAME}")
 message(STATUS "Compiler: ${CMAKE_C_COMPILER}")
 message(STATUS "----------------------------------")
+
+# ---------- 测试 ----------
+# 注意: OpenGL 程序需要图形环境才能运行
+# 此测试仅验证可执行文件已成功构建，不实际运行程序
+if(BUILD_TESTING)
+    add_test(NAME VerifyBuild COMMAND bash -c "test -f ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}.exe")
+endif()

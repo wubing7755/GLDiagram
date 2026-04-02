@@ -80,6 +80,11 @@ IV.  BUILDING
 
      Build output goes to build/bin/.
 
+     Testing (optional):
+     $ cmake -DBUILD_TESTING=ON ..
+     $ cmake --build .
+     $ ctest --output-on-failure
+
 
 
 V.   PROJECT STRUCTURE
