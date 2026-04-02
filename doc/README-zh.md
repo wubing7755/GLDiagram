@@ -4,7 +4,7 @@ GLDiagram
 基于 OpenGL 3.3 的绘图画布，集成了 Nuklear 即时模式 GUI。
 一个极简的 OpenGL + GUI 应用起步模板。
 
-$LastChangedDate$
+$2026-04$
 
 目录:
 
