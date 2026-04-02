@@ -4,7 +4,7 @@ GLDiagram
 An OpenGL drawing canvas with Nuklear immediate-mode GUI.
 A minimal starter template for OpenGL 3.3 + GUI applications.
 
-$LastChangedDate$
+
 
 Contents:
 
