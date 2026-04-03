@@ -32,18 +32,20 @@ jobs:
     - name: Configure CMake
       shell: bash
       run: |
-        if [ "${{ runner.os }}" == "Windows" ]; then
-          cmake -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        BUILD_DIR="build/${{ matrix.os }}-${{ matrix.build_type }}"
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          cmake -B "$BUILD_DIR" -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         else
-          cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          cmake -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         fi
 
     - name: Build
-      run: cmake --build build --config ${{ matrix.build_type }}
+      run: |
+        BUILD_DIR="build/${{ matrix.os }}-${{ matrix.build_type }}"
+        cmake --build "$BUILD_DIR" --config ${{ matrix.build_type }}
 
     - name: Test
-      if: runner.os != 'Windows'
-      working-directory: build
-      # Note: --config is NOT needed for ctest with single-config generators (Unix Makefiles)
-      # CMAKE_BUILD_TYPE was already set at configure time
-      run: ctest --output-on-failure
+      if: matrix.os != 'windows-latest'
+      run: |
+        BUILD_DIR="build/${{ matrix.os }}-${{ matrix.build_type }}"
+        cd "$BUILD_DIR" && ctest --output-on-failure

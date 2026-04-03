@@ -119,5 +119,9 @@ message(STATUS "----------------------------------")
 # 注意: OpenGL 程序需要图形环境才能运行
 # 此测试仅验证可执行文件已成功构建，不实际运行程序
 if(BUILD_TESTING)
-    add_test(NAME VerifyBuild COMMAND bash -c "test -f ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}.exe")
+    if(WIN32)
+        add_test(NAME VerifyBuild COMMAND bash -c "test -f ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}.exe")
+    else()
+        add_test(NAME VerifyBuild COMMAND bash -c "test -f ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}")
+    endif()
 endif()
