@@ -4,13 +4,17 @@ build/
 */build/
 CMakeCache.txt
 CMakeFiles/
-*.cmake
 Makefile
 *.ninja
 .ninja_deps
 .ninja_log
 compile_commands.json
 install_manifest.txt
+Testing/
+install/
+install-*/
+dist/
+out/
 
 # Visual Studio
 *.sln
@@ -88,7 +92,6 @@ Thumbs.db
 *~
 
 ### Version Control ###
-.gitattributes
 .git/
 *.orig
 *.rej
