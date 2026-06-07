@@ -49,11 +49,11 @@ function Get-ProjectOwnedSourceFiles {
 if (-not $SkipFormat -and (Get-Command clang-format -ErrorAction SilentlyContinue)) {
     $files = @(Get-ProjectOwnedSourceFiles)
     if ($files.Count -gt 0) {
-        Invoke-CheckedCommand -Command "clang-format" -Arguments @(
+        $formatArguments = @(
             "--dry-run",
-            "--Werror",
-            $files.FullName
-        )
+            "--Werror"
+        ) + @($files | ForEach-Object { $_.FullName })
+        Invoke-CheckedCommand -Command "clang-format" -Arguments $formatArguments
     }
 } elseif (-not $SkipFormat) {
     Write-Host "Skipping clang-format: command not found."
@@ -67,6 +67,7 @@ if ($EnableTidy) {
         $buildDirectory = Join-Path "build" $Preset
         $compileCommands = Join-Path $buildDirectory "compile_commands.json"
         $generatedIncludeDirectory = Join-Path $buildDirectory "generated\include"
+        $glfwIncludeDirectory = Join-Path $buildDirectory "_deps\glfw-src\include"
         $files = @(Get-ProjectOwnedSourceFiles | Where-Object { $_.Extension -eq ".c" })
         foreach ($file in $files) {
             if (Test-Path $compileCommands) {
@@ -83,7 +84,8 @@ if ($EnableTidy) {
                     "--extra-arg=-std=c11",
                     "--",
                     "-Iinclude",
-                    "-I$generatedIncludeDirectory"
+                    "-I$generatedIncludeDirectory",
+                    "-I$glfwIncludeDirectory"
                 )
             }
         }

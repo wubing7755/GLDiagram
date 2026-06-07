@@ -7,8 +7,8 @@
 #define GLFW_INCLUDE_NONE
 #endif
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
@@ -26,16 +26,14 @@
 #define MAX_VERTEX_BUFFER (512 * 1024)
 #define MAX_ELEMENT_BUFFER (128 * 1024)
 
-static void framebuffer_size_callback(GLFWwindow *window, int width, int height)
-{
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     (void)window;
     glViewport(0, 0, width, height);
 }
 
-int main(void)
-{
+int main(void) {
     if (!glfwInit()) {
-        fprintf(stderr, "Failed to initialize GLFW\n");
+        fputs("Failed to initialize GLFW\n", stderr);
         return EXIT_FAILURE;
     }
 
@@ -43,14 +41,11 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow *window = glfwCreateWindow(
-        WINDOW_WIDTH,
-        WINDOW_HEIGHT,
-        "GLDiagram " GLDIAGRAM_VERSION_STRING " - Nuklear GUI",
-        NULL,
-        NULL);
+    GLFWwindow *window =
+        glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT,
+                         "GLDiagram " GLDIAGRAM_VERSION_STRING " - Nuklear GUI", NULL, NULL);
     if (!window) {
-        fprintf(stderr, "Failed to create window\n");
+        fputs("Failed to create window\n", stderr);
         glfwTerminate();
         return EXIT_FAILURE;
     }
@@ -59,7 +54,7 @@ int main(void)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        fprintf(stderr, "Failed to init GLAD\n");
+        fputs("Failed to init GLAD\n", stderr);
         glfwDestroyWindow(window);
         glfwTerminate();
         return EXIT_FAILURE;
@@ -72,7 +67,7 @@ int main(void)
     struct nk_context *ctx;
     ctx = nk_glfw3_init(&glfw_ctx, window, NK_GLFW3_INSTALL_CALLBACKS);
     if (ctx == NULL) {
-        fprintf(stderr, "Failed to initialize Nuklear GLFW backend\n");
+        fputs("Failed to initialize Nuklear GLFW backend\n", stderr);
         glfwDestroyWindow(window);
         glfwTerminate();
         return EXIT_FAILURE;
@@ -86,10 +81,8 @@ int main(void)
         glfwPollEvents();
         nk_glfw3_new_frame(&glfw_ctx);
 
-        if (nk_begin(ctx,
-                "Show",
-                nk_rect(50.0f, 50.0f, 220.0f, 220.0f),
-                NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_CLOSABLE)) {
+        if (nk_begin(ctx, "Show", nk_rect(50.0f, 50.0f, 220.0f, 220.0f),
+                     NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_CLOSABLE)) {
             nk_layout_row_static(ctx, 30, 100, 1);
 
             if (nk_button_label(ctx, "Click Me")) {
