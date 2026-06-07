@@ -72,5 +72,6 @@ jobs:
               --quiet \
               --error-exitcode=1 \
               --file-list=cppcheck-files.txt \
-              -I include
+              -I include \
+              -I build/debug/generated/include
           fi

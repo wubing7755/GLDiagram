@@ -88,7 +88,7 @@ Nuklear headers keep their upstream include namespaces.
 GLAD can be regenerated with:
 
 ```sh
-glad --generator=c --profile=core --api=gl:3.3 --out-path=include/glad/
+glad --generator=c --profile=compatibility --api=gl:3.3 --out-path=include/glad/
 ```
 
 ## Documentation Map

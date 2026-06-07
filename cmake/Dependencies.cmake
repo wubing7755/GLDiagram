@@ -18,7 +18,7 @@ find_package(OpenGL REQUIRED)
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/src/glad.c"
         OR NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/glad/glad.h")
-    message(FATAL_ERROR "GLAD files not found. Regenerate with: glad --generator=c --profile=core --api=gl:3.3 --out-path=include/glad/")
+    message(FATAL_ERROR "GLAD files not found. Regenerate with: glad --generator=c --profile=compatibility --api=gl:3.3 --out-path=include/glad/")
 endif()
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include/KHR/khrplatform.h")

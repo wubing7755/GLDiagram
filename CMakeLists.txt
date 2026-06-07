@@ -39,26 +39,27 @@ configure_file(
 )
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/CompilerOptions.cmake")
-include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/Dependencies.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/Sources.cmake")
 
-add_library(gldiagram_vendor OBJECT ${GLDIAGRAM_VENDOR_SOURCES})
-target_compile_features(gldiagram_vendor PRIVATE c_std_11)
-target_compile_definitions(gldiagram_vendor PRIVATE GLFW_INCLUDE_NONE)
-target_include_directories(gldiagram_vendor
-    PRIVATE
-        "${GLDIAGRAM_GENERATED_INCLUDE_DIR}"
-)
-target_include_directories(gldiagram_vendor
-    SYSTEM PRIVATE
-        "${CMAKE_CURRENT_SOURCE_DIR}/include"
-        "${glfw_SOURCE_DIR}/include"
-)
-set_target_properties(gldiagram_vendor PROPERTIES
-    POSITION_INDEPENDENT_CODE ON
-)
-
 if(GLDIAGRAM_BUILD_APP)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/Dependencies.cmake")
+
+    add_library(gldiagram_vendor OBJECT ${GLDIAGRAM_VENDOR_SOURCES})
+    target_compile_features(gldiagram_vendor PRIVATE c_std_11)
+    target_compile_definitions(gldiagram_vendor PRIVATE GLFW_INCLUDE_NONE)
+    target_include_directories(gldiagram_vendor
+        PRIVATE
+            "${GLDIAGRAM_GENERATED_INCLUDE_DIR}"
+    )
+    target_include_directories(gldiagram_vendor
+        SYSTEM PRIVATE
+            "${CMAKE_CURRENT_SOURCE_DIR}/include"
+            "${glfw_SOURCE_DIR}/include"
+    )
+    set_target_properties(gldiagram_vendor PROPERTIES
+        POSITION_INDEPENDENT_CODE ON
+    )
+
     add_executable(GLDiagram
         ${GLDIAGRAM_APP_SOURCES}
         $<TARGET_OBJECTS:gldiagram_vendor>

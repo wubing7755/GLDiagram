@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <gldiagram/version.h>
 
@@ -34,8 +35,8 @@ static void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 int main(void)
 {
     if (!glfwInit()) {
-        printf("Failed to initialize GLFW\n");
-        return -1;
+        fprintf(stderr, "Failed to initialize GLFW\n");
+        return EXIT_FAILURE;
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -49,25 +50,33 @@ int main(void)
         NULL,
         NULL);
     if (!window) {
-        printf("Failed to create window\n");
+        fprintf(stderr, "Failed to create window\n");
         glfwTerminate();
-        return -1;
+        return EXIT_FAILURE;
     }
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        printf("Failed to init GLAD\n");
+        fprintf(stderr, "Failed to init GLAD\n");
+        glfwDestroyWindow(window);
         glfwTerminate();
-        return -1;
+        return EXIT_FAILURE;
     }
 
-    printf("OpenGL: %s\n", (const char *)glGetString(GL_VERSION));
+    const GLubyte *version = glGetString(GL_VERSION);
+    printf("OpenGL: %s\n", version != NULL ? (const char *)version : "unknown");
 
     struct nk_glfw glfw_ctx = {0};
     struct nk_context *ctx;
     ctx = nk_glfw3_init(&glfw_ctx, window, NK_GLFW3_INSTALL_CALLBACKS);
+    if (ctx == NULL) {
+        fprintf(stderr, "Failed to initialize Nuklear GLFW backend\n");
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return EXIT_FAILURE;
+    }
 
     struct nk_font_atlas *atlas;
     nk_glfw3_font_stash_begin(&glfw_ctx, &atlas);
@@ -99,6 +108,7 @@ int main(void)
 
     nk_glfw3_shutdown(&glfw_ctx);
 
+    glfwDestroyWindow(window);
     glfwTerminate();
-    return 0;
+    return EXIT_SUCCESS;
 }
