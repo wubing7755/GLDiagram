@@ -10,12 +10,9 @@ quick reference for supported commands and options.
 - A C11 compiler
 - OpenGL 3.3 capable graphics driver
 
-Linux builds need OpenGL and X11 development packages:
-
-```sh
-sudo apt-get install build-essential cmake libgl1-mesa-dev \
-  libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
-```
+Linux builds need OpenGL and X11 development packages. See
+[guides/environment.md](guides/environment.md) for platform-specific setup
+instructions.
 
 ## Presets
 

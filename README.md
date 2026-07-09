@@ -39,12 +39,18 @@ On Linux/macOS:
 - A C11-compatible compiler
 - OpenGL 3.3 capable graphics driver
 
+For step-by-step platform setup, see
+[doc/guides/environment.md](doc/guides/environment.md).
+
 Linux builds need OpenGL and X11 development packages. On Debian or Ubuntu:
 
 ```sh
 sudo apt-get install build-essential cmake libgl1-mesa-dev \
   libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
 ```
+
+See [doc/guides/environment.md](doc/guides/environment.md) for other
+distributions and macOS.
 
 ## Presets
 
@@ -72,6 +78,7 @@ tests/          CTest test programs
 cmake/          CMake modules
 scripts/        Local check entry points
 doc/            Contributor documentation
+doc/guides/     Topic guides
 .github/        CI, issue, and PR templates
 ```
 
@@ -93,14 +100,17 @@ glad --generator=c --profile=compatibility --api=gl:3.3 --out-path=include/glad/
 
 ## Documentation Map
 
+- [doc/README.md](doc/README.md) — full documentation index.
+- [doc/guides/environment.md](doc/guides/environment.md) — platform prerequisites and tool installation.
 - [doc/cmake-guide.md](doc/cmake-guide.md) explains day-to-day CMake usage.
 - [doc/build.md](doc/build.md) lists supported presets, options, and commands.
 - [doc/testing.md](doc/testing.md) describes automated and manual checks.
+- [doc/release.md](doc/release.md) describes release preparation.
 - [doc/template.md](doc/template.md) records how the C template was applied.
+- [doc/guides/ai-agent.md](doc/guides/ai-agent.md) — AI agent policy (redirects to AGENTS.md).
 - [CONTRIBUTING.md](CONTRIBUTING.md) describes contribution workflow.
 - [SECURITY.md](SECURITY.md) describes vulnerability and dependency handling.
-- [C_PROJECT_STANDARD.md](C_PROJECT_STANDARD.md) defines the local project
-  standard.
+- [C_PROJECT_STANDARD.md](C_PROJECT_STANDARD.md) defines the local project standard.
 
 ## License
 
