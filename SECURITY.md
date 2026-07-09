@@ -21,3 +21,7 @@ publishes versioned releases with a separate support table.
 GLFW is fetched by CMake. GLAD and Nuklear are vendored source/header assets;
 update them intentionally and record the generation or upstream version in the
 PR.
+
+For GitHub Actions updates, validate the affected workflow in CI. For build or
+toolchain dependency changes, run the relevant preset and tests described in
+`doc/cmake-guide.md`.

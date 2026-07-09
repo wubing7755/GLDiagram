@@ -1,6 +1,6 @@
 # GLDiagram 中文说明
 
-GLDiagram 是一个 C11 OpenGL 3.3 绘图画布示例，集成 Nuklear 即时模式
+GLDiagram 是一个 C11 OpenGL 3.3 绘图画布应用，集成 Nuklear 即时模式
 GUI。本仓库已按本地 `c-project-standard` 模板整理：模块化 CMake、CMake
 presets、CTest、检查脚本、CI 和简短维护文档。
 
@@ -34,6 +34,7 @@ tests/          CTest 测试
 cmake/          CMake 模块
 scripts/        本地检查脚本
 doc/            维护文档
+doc/guides/     专题指南
 .github/        CI、Issue 和 PR 模板
 ```
 
@@ -46,11 +47,8 @@ doc/            维护文档
 - OpenGL 通过 `find_package(OpenGL REQUIRED)` 查找。
 - GLAD 和 Nuklear 作为源码/头文件随仓库维护。
 
-Linux 构建需要 OpenGL 与 X11 开发包：
+Linux 构建需要 OpenGL 与 X11 开发包，详见
+[doc/guides/environment.md](doc/guides/environment.md)。
 
-```sh
-sudo apt-get install build-essential cmake libgl1-mesa-dev \
-  libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
-```
-
-更多说明见 `doc/cmake-guide.md`、`doc/build.md` 和 `doc/testing.md`。
+更多说明见 [doc/README.md](doc/README.md) 和
+[doc/cmake-guide.md](doc/cmake-guide.md)。

@@ -1,6 +1,45 @@
 # CMake Guide
 
-This guide explains common CMake workflows for GLDiagram.
+This guide explains common CMake workflows for GLDiagram. Use it when you need
+to understand configure, build, test, install, presets, or troubleshooting.
+
+## Requirements
+
+These tools are not provided by the repository. Install them before configuring
+the project.
+
+- CMake 3.20 or newer.
+- A C11 compiler.
+- One supported compiler family:
+  - MSVC on Windows.
+  - GCC or Clang on Linux.
+  - AppleClang or Clang on macOS.
+- OpenGL 3.3 capable graphics driver (for running the application).
+
+For step-by-step installation commands per platform, see
+[guides/environment.md](guides/environment.md).
+
+The project requires C11 at the target level with `c_std_11`. Keep public
+headers portable across the supported compiler families and avoid compiler
+extensions unless they are isolated behind small CMake/compiler checks.
+
+## Tool Installation Notes
+
+Typical setup choices:
+
+| Platform | Compiler | Generator |
+| --- | --- | --- |
+| Windows (MSVC) | MSVC from Visual Studio Build Tools or Visual Studio | Default (MSBuild or Ninja) |
+| Windows (MSYS2) | Clang or GCC from MSYS2 UCRT64 | Default or Ninja |
+| Linux | GCC or Clang from the system package manager | Default or Ninja |
+| macOS | AppleClang from Xcode Command Line Tools or Clang | Default or Ninja |
+
+On Windows, use Developer PowerShell, Developer Command Prompt, or a VS Code
+CMake kit that initializes MSVC. A normal shell may find CMake but still fail
+to find `cl.exe`.
+
+This project uses generator-neutral presets. The default CMake generator on
+each platform is used unless overridden locally.
 
 ## Mental Model
 
@@ -72,8 +111,11 @@ cmake --preset debug -DGLDIAGRAM_BUILD_APP=OFF
 | `GLDIAGRAM_ENABLE_UBSAN` | Enables UndefinedBehaviorSanitizer where supported. |
 | `GLDIAGRAM_ENABLE_COVERAGE` | Enables coverage flags where supported. |
 
-The app, tests, and install rules default to on for top-level builds. They
-default to off when this project is included through `add_subdirectory()`.
+The app, tests, and install rules default to on for top-level builds and off
+when this project is included as a subproject.
+
+Use `cmake -LAH -S . -B build/debug` after configuring if you need to inspect
+available cache options.
 
 ## Multi-Config Generators
 
@@ -138,6 +180,36 @@ project(GLDiagram VERSION 1.0.0 LANGUAGES C)
 CMake generates `gldiagram/version.h` from that value. Source files should use
 the generated macros instead of duplicating literal version numbers.
 
+## Install
+
+Install a configured release build with CMake:
+
+```sh
+cmake --preset release
+cmake --build --preset release
+cmake --install build/release --config Release --prefix install
+```
+
+The current install rule installs the GLDiagram executable. It does not publish
+a CMake package config because GLDiagram is currently an application, not a
+library API package.
+
+## Local Quality Checks
+
+The check scripts run configure, build, and tests. They also run optional tools
+when available:
+
+```sh
+./scripts/check.sh debug tidy
+```
+
+```powershell
+./scripts/check.ps1 -EnableTidy
+```
+
+If `clang-format`, `clang-tidy`, or `yamllint` is not installed locally, use CI
+as the authoritative check for those tools.
+
 ## Troubleshooting
 
 Old CMake cache points at another path:
@@ -146,15 +218,29 @@ Old CMake cache points at another path:
 - Fix: delete the affected build directory, such as `build/release`, and run
   `cmake --preset release` again.
 
+C compiler is missing on Windows:
+
+- Symptom: configure says `CMAKE_C_COMPILER` is not set.
+- Fix: launch Developer PowerShell, Developer Command Prompt, or select an
+  MSVC CMake kit in VS Code before configuring.
+
 Linux GLFW configure fails with missing X11 headers:
 
 - Symptom: CMake or compilation fails for X11, RandR, Xinerama, Cursor, or Xi.
-- Fix: install the Linux packages listed in `doc/build.md`.
+- Fix: install the Linux packages listed in
+  [guides/environment.md](guides/environment.md).
 
 `ctest` cannot find a test executable with Visual Studio:
 
 - Symptom: CTest looks in the wrong configuration directory.
 - Fix: pass `-C Debug` or `-C Release`, matching the build config.
+
+MSBuild reports `MSB1009` for `all.vcxproj`:
+
+- Symptom: a Visual Studio build tree fails when an IDE or script runs
+  `cmake --build build/debug --config Debug --target all`.
+- Fix: build with the CMake preset, omit the explicit target, or select the
+  Visual Studio aggregate target `ALL_BUILD` instead of `all`.
 
 `clang-format`, `clang-tidy`, or `yamllint` is missing:
 

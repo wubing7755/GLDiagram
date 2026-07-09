@@ -21,9 +21,13 @@ For command details and generator-specific flags, see `cmake-guide.md`.
 CI runs clang-format, clang-tidy, cppcheck, and YAML linting. Local clang-tidy
 checks are optional because tool availability varies by platform:
 
+**Linux/macOS**
+
 ```sh
 ./scripts/check.sh debug tidy
 ```
+
+**Windows PowerShell**
 
 ```powershell
 ./scripts/check.ps1 -EnableTidy
